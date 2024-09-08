@@ -1,9 +1,9 @@
+import Image from 'next/image';
+import Link from 'next/link';
+import App2 from '../components/DAOApp.js';
 
 export default function SecondPage() {
-
   return (
-    <div>
-      <h1>Welcome to the Second Page!</h1>
-    </div>
+    <App2 />
   );
 }

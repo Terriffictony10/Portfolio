@@ -7,7 +7,8 @@ contract Token {
     string public name; // Name of the token
     string public symbol; // Symbol of the token
     uint256 public decimals = 18; // Number of decimals the token uses
-    uint256 public totalSupply; // Total supply of the token
+    uint256 public totalSupply;
+    address public deployer; // Total supply of the token
 
     mapping(address => uint256) public balanceOf; // Mapping to track balances of addresses
     mapping(address => mapping(address => uint256)) public allowance; // Mapping to track allowances
@@ -37,6 +38,7 @@ contract Token {
         symbol = _symbol;
         totalSupply = _totalSupply * (10**decimals); // Adjust total supply for decimals
         balanceOf[msg.sender] = totalSupply; // Assign all tokens to contract creator
+        deployer = msg.sender;
     }
 
     // Function to transfer tokens
