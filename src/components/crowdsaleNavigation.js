@@ -1,18 +1,23 @@
 import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
 import Image from 'next/image';
 import logo from '../logo.png';
 
-const Navigation = () => {
+const Navigation = ({ account, accountBalance }) => {
   return(
     <Navbar>
-    <Image 
-    src={logo} 
-    alt="logo" 
-    width="40" 
-    height="40"
-    className="d-inline-block align-top mx-3"
-    />
-    <Navbar.Brand href="#">Decentratality ICO Crowdsale</Navbar.Brand>
+    
+    
+       {account && (
+        <Nav className="nav-position">
+          <div className="accountsAndBalance-container">
+            <div className="accountsAndBalance">
+              <p className="no-padding"><strong>Account:</strong> {account}</p>
+              <p className="no-padding"><strong>Tokens Owned:</strong> {accountBalance}</p>
+            </div>
+          </div>
+        </Nav>
+      )}
     </Navbar>
     
   )

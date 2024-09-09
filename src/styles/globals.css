@@ -2,13 +2,97 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Russo One',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
+  padding: 0px;
+  background-image: url('./background-image.jpg'); /* Assuming it's in the same directory */
+  background-size: contain; /* Ensures the entire image is visible while maintaining the aspect ratio */
+  background-position: center; /* Centers the image horizontally and vertically */
+  background-repeat: no-repeat; /* Prevents tiling */
+  background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+p{
+  padding: 50px;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.no-padding {
+  padding: 0; /* Remove padding */
+  margin: 0; /* Optionally remove margin if needed */
+}
+.accountsAndBalance {
+  background-color: rgba(166, 166, 166, 0);
+  font-family: 'Russo One', sans-serif; /* Apply Russo One font */ /* Make text bolder */
+  color: #000000; /* Set text color (white for contrast) */
+}
+
+/* Container for account and balance, aligned to the top-right corner */
+.accountsAndBalance-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Align items to the end (right) */
+  text-align: right; /* Align text to the right */
+  color: #ffffff; /* Text-muted color */
+}
+
+/* New class for positioning and styling the nav item */
+.nav-position {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 2rem; /* Adjust margin as needed */
+  margin-end: 1rem; /* Adjust margin as needed */
+}
+.faded-bg {
+  background-color: rgba(166, 166, 166, 0); /* Faded background with 40% transparency */
+  padding: 30px; /* Add some padding for readability */
+  border-radius: 5px; /* Optional: Add some rounding to the corners */
+  font-family: 'Russo One', sans-serif; /* Apply Russo One font */
+}
+
+.faded-bg-large {
+  background-color: rgba(166, 166, 166, 0); /* Same faded background */
+  padding: 60px; /* Same padding for consistency */
+  border-radius: 5px; /* Same border radius */
+  font-family: 'Russo One', sans-serif; /* Same font */
+  font-size: 5rem; /* Larger font size */
+  text-align: center; /* Center text horizontally */
+  color: #a6a6a6; /* Text color */
+  
+}
+
+.text-layer {
+  position: relative;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100px; /* Adjust height as needed */
+  width: 100%; /* Full width to ensure centering */
+}
+
+.text-layer .text-overlay {
+  position: absolute;
+  top: 0;
+  left: 500;
+  color: #a6a6a6; /* Text color for both layers */
+  text-shadow: 
+    1px 1px 2px rgba(0, 0, 0, 0.6), /* Dark shadow */
+    0 0 25px rgba(0, 0, 0, 0.6), /* Glowing shadow */
+    0 0 5px rgba(0, 0, 0, 0.6); /* Subtle inner shadow */
+}
+
+.text-layer .text-overlay:nth-child(1) {
+  z-index: 1; /* Bottom layer */
+}
+
+.text-layer .text-overlay:nth-child(2) {
+  z-index: 2; /* Top layer */
+  transform: translate(2px, 2px); /* Adjust the offset to achieve the desired overlap effect */
 }
