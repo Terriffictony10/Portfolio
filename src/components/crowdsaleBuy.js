@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Spinner from 'react-bootstrap/Spinner';
@@ -31,18 +30,18 @@ const Buy = ({ provider, price, crowdsale, setIsLoading }) => {
     }
 
     return (
-        <Form onSubmit={buyHandler} style={{ maxWidth: '800px', margin: '50px auto' }}>
+        <Form onSubmit={buyHandler} >
             <Form.Group as={Row}>
                 <Col>
                     <Form.Control type="number" placeholder="Enter amount" onChange={(e) => setAmount(e.target.value)} />
                 </Col>
-                <Col className='text-center'>
+                <Col className="d-flex justify-content-start">
                     {isWaiting ? (
                         <Spinner animation="border" />
                     ) : (
-                        <Button variant="primary" type="submit" style={{ width: '100%' }}>
+                        <button type="submit" className='buy-button'>
                             Buy Tokens
-                        </Button>
+                        </button>
                     )}
                 </Col>
             </Form.Group>

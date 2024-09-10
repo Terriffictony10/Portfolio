@@ -76,7 +76,7 @@ function App2() {
     <Container>
       <Navigation account={account} />
 
-      <h1 className='my-4 text-center'>Welcome to our DAO!</h1>
+      <h1 className='my-4 text-center'></h1>
 
       {isLoading ? (
         <Loading />

@@ -74,8 +74,14 @@ function App1() {
 
   return (
     <Container>
-      <Navigation account={account} accountBalance={accountBalance} />
-
+    <Container className="accounts-glass-container">
+  <div className="accountsAndBalance">
+    <p className="no-padding-right"><strong>Account:</strong> {account}</p>
+    <p className="no-padding-right"><strong>Tokens Owned:</strong> {accountBalance}</p>
+  </div>
+</Container>
+    <Container className="main-glass-container">
+      
       <div className="text-layer">
         <h1 className='faded-bg-large text-overlay'>DECENTRATALITY</h1>
         <h1 className='faded-bg-large text-overlay'>DECENTRATALITY</h1>
@@ -88,6 +94,7 @@ function App1() {
           <p className='text-center'><strong>Current Price:</strong> {price} ETH</p>
           <Buy provider={provider} price={price} crowdsale={crowdsale} setIsLoading={setIsLoading} />
           <Progress maxTokens={maxTokens} tokensSold={tokensSold} />
+          
         </>
       )}
 
@@ -99,6 +106,7 @@ function App1() {
         </Link>
       </div>
       
+    </Container>
     </Container>
   );
 }

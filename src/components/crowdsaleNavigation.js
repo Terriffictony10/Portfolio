@@ -9,13 +9,12 @@ const Navigation = ({ account, accountBalance }) => {
     
     
        {account && (
-        <Nav className="nav-position">
-          <div className="accountsAndBalance-container">
+        <Nav>
             <div className="accountsAndBalance">
-              <p className="no-padding"><strong>Account:</strong> {account}</p>
-              <p className="no-padding"><strong>Tokens Owned:</strong> {accountBalance}</p>
+              <p className="no-padding-right"><strong>Account:</strong> {account}</p>
+              <p className="no-padding-right"><strong>Tokens Owned:</strong> {accountBalance}</p>
             </div>
-          </div>
+         
         </Nav>
       )}
     </Navbar>

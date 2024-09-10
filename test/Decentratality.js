@@ -1,0 +1,191 @@
+const { expect } = require('chai');
+const { ethers } = require('hardhat');
+
+const tokens = (n) => {
+  return ethers.parseUnits(n.toString(), 'ether')
+}
+
+const ether = tokens
+
+describe('Decentratality', () => {
+  let decentratality, accounts, deployer, receiver, exchange
+
+  beforeEach(async () => {
+    const Token = await ethers.getContractFactory('Decentratality')
+    decentratality = await Token.deploy()
+
+    accounts = await ethers.getSigners()
+    deployer = accounts[0]
+    receiver = accounts[1]
+    exchange = accounts[2]
+    user1 = accounts[3]
+  })
+
+  describe('Deployment', () => {
+    const name = 'Decentratality'
+    const symbol = 'DHPT'
+    const decimals = '18'
+    const totalSupply = tokens('1000000')
+
+    it('has correct name', async () => {
+      expect(await decentratality.name()).to.equal(name)
+    })
+
+    it('has correct symbol', async () => {
+      expect(await decentratality.symbol()).to.equal(symbol)
+    })
+
+    it('has correct decimals', async () => {
+      expect(await decentratality.decimals()).to.equal(decimals)
+    })
+
+    it('has correct total supply', async () => {
+      expect(await decentratality.totalSupply()).to.equal(totalSupply)
+    })
+
+    it('assigns total supply to deployer', async () => {
+      expect(await decentratality.balanceOf(deployer.address)).to.equal(totalSupply)
+    })
+
+  })
+
+
+  describe('Sending Tokens', () => {
+    let amount, transaction, result
+
+    describe('Success', () => {
+
+      beforeEach(async () => {
+        amount = tokens(100)
+        transaction = await decentratality.connect(deployer).transfer(receiver.address, amount)
+        result = await transaction.wait()
+      })
+
+      it('transfers decentratality balances', async () => {
+        expect(await decentratality.balanceOf(deployer.address)).to.equal(tokens(999900))
+        expect(await decentratality.balanceOf(receiver.address)).to.equal(amount)
+      })
+
+      it('emits a Transfer event', async () => {
+        await expect(transaction).to.emit(decentratality, 'Transfer').
+          withArgs(deployer.address, receiver.address, amount)
+      })
+
+    })
+
+    describe('Failure', () => {
+      it('rejects insufficient balances', async () => {
+        const invalidAmount = tokens(100000000)
+        await expect(decentratality.connect(deployer).transfer(receiver.address, invalidAmount)).to.be.reverted
+      })
+
+      it('rejects invalid recipent', async () => {
+        const amount = tokens(100)
+        await expect(decentratality.connect(deployer).transfer('0x0000000000000000000000000000000000000000', amount)).to.be.reverted
+      })
+
+    })
+
+  })
+
+  describe('Approving Tokens', () => {
+    let amount, transaction, result
+
+    beforeEach(async () => {
+      amount = tokens(100)
+      transaction = await decentratality.connect(deployer).approve(exchange.address, amount)
+      result = await transaction.wait()
+    })
+
+    describe('Success', () => {
+        it('allocates an allowance for delegated decentratality spending', async () => {
+        expect(await decentratality.allowance(deployer.address, exchange.address)).to.equal(amount)
+      })
+
+      it('emits an Approval event', async () => {
+        await expect(transaction).to.emit(decentratality, 'Approval').
+          withArgs(deployer.address, exchange.address, amount)
+      })
+
+    })
+
+    describe('Failure', () => {
+      it('rejects invalid spenders', async () => {
+        await expect(decentratality.connect(deployer).approve('0x0000000000000000000000000000000000000000', amount)).to.be.reverted
+      })
+    })
+
+  })
+
+  describe('Delegated Token Transfers', () => {
+    let amount, transaction, result
+
+    beforeEach(async () => {
+      amount = tokens(100)
+      transaction = await decentratality.connect(deployer).approve(exchange.address, amount)
+      result = await transaction.wait()
+    })
+
+    describe('Success', () => {
+      beforeEach(async () => {
+        transaction = await decentratality.connect(exchange).transferFrom(deployer.address, receiver.address, amount)
+        result = await transaction.wait()
+      })
+
+      it('transfers decentratality balances', async () => {
+        expect(await decentratality.balanceOf(deployer.address)).to.be.equal(ethers.parseUnits('999900', 'ether'))
+        expect(await decentratality.balanceOf(receiver.address)).to.be.equal(amount)
+      })
+
+      it('rests the allowance', async () => {
+        expect(await decentratality.allowance(deployer.address, exchange.address)).to.be.equal(0)
+      })
+
+      it('emits a Transfer event', async () => {
+        await expect(transaction).to.emit(decentratality, 'Transfer').
+          withArgs(deployer.address, receiver.address, amount)
+      })
+
+    })
+
+    describe('Failure', async () => {
+      // Attempt to transfer too many tokens
+      const invalidAmount = tokens(100000000) // 100 Million, greater than total supply
+      await expect(decentratality.connect(exchange).transferFrom(deployer.address, receiver.address, invalidAmount)).to.be.reverted
+    })
+
+  })
+  describe('Restaurant Creation', () => {
+    let restaurantAddress;
+    describe('Success', () => {
+      beforeEach(async () => {
+        transaction = await decentratality.createRestaurant('Montecito')
+        result = await transaction.wait()
+
+        const eventLogs = result.logs;
+        const event = decentratality.interface.decodeEventLog(
+            'RestaurantCreated', // The event name
+            eventLogs[0].data,    // Event data
+            eventLogs[0].topics   // Event topics (indexed parameters)
+         );
+
+        restaurantAddress = event.restaurant; // Get the restaurant address from the decoded event // Log the address
+      })
+      it('creates the restaurant and stores it in the restaurants mapping', async() => {
+         const restaurantId = await decentratality.restaurants(restaurantAddress);
+        
+
+            // Check if the ID matches what was expected (1)
+            expect(await decentratality.restaurants(restaurantAddress)).to.equal(1);
+      })
+      
+
+    })
+
+    describe('Failure', async () => {
+     
+    })
+
+  })
+
+})

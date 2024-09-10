@@ -1,55 +1,132 @@
-
+@font-face {
+  font-family: 'MyCustomFont';
+  src: url('./cyberfont.otf') format('opentype'); /* Specify OTF format */
+  font-weight: normal;
+  font-style: normal;
+}
 body {
   margin: 0;
+  min-height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
   'Russo One',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  padding: 0px;
-  background-image: url('./background-image.jpg'); /* Assuming it's in the same directory */
-  background-size: contain; /* Ensures the entire image is visible while maintaining the aspect ratio */
-  background-position: center; /* Centers the image horizontally and vertically */
+  background-image: url('./background-image.jpg');
+  background-size: cover; /* Ensures the entire image is visible while maintaining the aspect ratio */ /* Centers the image horizontally and vertically */
   background-repeat: no-repeat; /* Prevents tiling */
-  background-attachment: fixed;
+  background-position: top;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 }
 p{
-  padding: 50px;
+  padding: 10px;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.main-glass-container{
+  height: 520px !important;
+  width: 70vw !important;
+  padding: 30px 50px;
+  border-radius: 50px;
+  background-color: rgba(255, 255, 255, 0.027);
+  backdrop-filter: blur(5px);
 
-.no-padding {
-  padding: 0; /* Remove padding */
-  margin: 0; /* Optionally remove margin if needed */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Keep content aligned to the top */
+  align-items: center;
+
+  /* To ensure it's centered on all screen sizes */
+  margin-top: -200px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 40px 0 100px #a6a6a6,
+    -40px 0 100px #ffffff;
+
 }
+.accounts-glass-container {
+  min-height: 100px; /* Adjusted height to ensure enough space for content */
+  width:500px !important; /* Adjusted width for better content fit */
+  padding: 20px; /* Adjusted padding */
+  border-radius: 20px; /* More subtle rounding */
+  background-color: rgba(255, 255, 255, 0.1); /* Glass effect */
+  backdrop-filter: blur(10px); /* Stronger blur effect for the glass look */
+  
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center the content vertically */
+  align-items: flex-start; /* Align content to the left */
+
+  /* Positioning it to the top-right corner */
+  position: fixed;
+  top: 20px; /* Slightly adjusted distance from the top */
+  right: 20px; /* Adjusted distance from the right */
+
+  /* Optional shadow for the glass effect */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.buy-button{
+  width: 300px;
+  display: inline-flex; /* Prevent block behavior */
+  border-radius: 1000px; /* Adjust height based on content */
+  padding: 1em 2em;
+  background-color: #161a20;
+  border: none;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+
+  position: relative;
+
+}
+
+.buy-button::after{
+  content: '';
+  position: absolute;
+  height: 101%;
+  width: 101%;
+  border-radius: 1000px;
+  background-image: linear-gradient(to bottom right, #000000, #fffff1);
+  z-index: -1;
+}
+.buy-button:hover{
+  z-index: 0;
+  box-shadow: 40px 0 100px #a6a6a6,
+    -40px 0 100px #ffffff;
+}
+
+
+
+.no-padding-right {
+  color: #000000;
+  margin: 0;
+  padding: 0; /* Optionally remove margin if needed */
+}
+
 .accountsAndBalance {
-  background-color: rgba(166, 166, 166, 0);
-  font-family: 'Russo One', sans-serif; /* Apply Russo One font */ /* Make text bolder */
-  color: #000000; /* Set text color (white for contrast) */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align text to the left */
+  color: white; /* Set text color for contrast */
+  font-family: 'Russo One', sans-serif; /* Use your font */
+  font-size: 0.9rem; /* Adjusted text size */
+  line-height: 1.5;/* Set text color (white for contrast) */
 }
 
 /* Container for account and balance, aligned to the top-right corner */
-.accountsAndBalance-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end; /* Align items to the end (right) */
-  text-align: right; /* Align text to the right */
-  color: #ffffff; /* Text-muted color */
-}
 
 /* New class for positioning and styling the nav item */
-.nav-position {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin-top: 2rem; /* Adjust margin as needed */
-  margin-end: 1rem; /* Adjust margin as needed */
-}
+
 .faded-bg {
   background-color: rgba(166, 166, 166, 0); /* Faded background with 40% transparency */
   padding: 30px; /* Add some padding for readability */
@@ -59,13 +136,13 @@ code {
 
 .faded-bg-large {
   background-color: rgba(166, 166, 166, 0); /* Same faded background */
-  padding: 60px; /* Same padding for consistency */
+  padding: 10px; /* Same padding for consistency */
   border-radius: 5px; /* Same border radius */
   font-family: 'Russo One', sans-serif; /* Same font */
   font-size: 5rem; /* Larger font size */
   text-align: center; /* Center text horizontally */
-  color: #a6a6a6; /* Text color */
-  
+  color: #000000; /* Text color */
+  font-family: 'MyCustomFont';
 }
 
 .text-layer {
@@ -73,19 +150,11 @@ code {
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
-  height: 100px; /* Adjust height as needed */
-  width: 100%; /* Full width to ensure centering */
+  height: 100px; /* Adjust height as needed */ /* Full width to ensure centering */
 }
 
 .text-layer .text-overlay {
-  position: absolute;
-  top: 0;
-  left: 500;
-  color: #a6a6a6; /* Text color for both layers */
-  text-shadow: 
-    1px 1px 2px rgba(0, 0, 0, 0.6), /* Dark shadow */
-    0 0 25px rgba(0, 0, 0, 0.6), /* Glowing shadow */
-    0 0 5px rgba(0, 0, 0, 0.6); /* Subtle inner shadow */
+  position: absolute; /* Text color for both layers */ /* Subtle inner shadow */
 }
 
 .text-layer .text-overlay:nth-child(1) {
@@ -93,6 +162,5 @@ code {
 }
 
 .text-layer .text-overlay:nth-child(2) {
-  z-index: 2; /* Top layer */
-  transform: translate(2px, 2px); /* Adjust the offset to achieve the desired overlap effect */
+  z-index: 2; /* Top layer */ /* Adjust the offset to achieve the desired overlap effect */
 }
