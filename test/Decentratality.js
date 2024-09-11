@@ -156,7 +156,7 @@ describe('Decentratality', () => {
 
   })
   describe('Restaurant Creation', () => {
-    let restaurantAddress;
+    let restaurantAddress, restaurantId;
     describe('Success', () => {
       beforeEach(async () => {
         transaction = await decentratality.createRestaurant('Montecito')
@@ -168,15 +168,12 @@ describe('Decentratality', () => {
             eventLogs[0].data,    // Event data
             eventLogs[0].topics   // Event topics (indexed parameters)
          );
-
-        restaurantAddress = event.restaurant; // Get the restaurant address from the decoded event // Log the address
+        restaurantAddress = event.restaurant;
+        restaurantId = event.id; // Get the restaurant address from the decoded event // Log the address
       })
-      it('creates the restaurant and stores it in the restaurants mapping', async() => {
-         const restaurantId = await decentratality.restaurants(restaurantAddress);
-        
-
-            // Check if the ID matches what was expected (1)
-            expect(await decentratality.restaurants(restaurantAddress)).to.equal(1);
+      it('creates the restaurant and stores it in the restaurants mapping properly', async() => {
+        const restaurantContract = await decentratality.restaurants(restaurantId);
+        expect(restaurantContract).to.equal(restaurantAddress);
       })
       
 

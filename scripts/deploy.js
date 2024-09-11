@@ -45,64 +45,9 @@ async function main() {
 
   console.log(`DAO deployed to: ${dao.target}\n`)
 	
-	// console.log(`Fetching accounts & network...\n`)
-
-  	
-//  	transaction = await token2.transfer(investor1.address, tokens(200000))
-//   	await transaction.wait()
-
-//   	transaction = await token2.transfer(investor2.address, tokens(200000))
-//  	await transaction.wait()
-
-//   	transaction = await token2.transfer(investor3.address, tokens(200000))
-//   	await transaction.wait()
-
-  
-
-//   // Funder sends Ether to DAO treasury
   transaction = await funder.sendTransaction({ to: dao.target, value: ether(1000) }) // 1,000 Ether
   await transaction.wait()
-//   	console.log(`Sent funds to dao treasury...\n`)
 
-//   	for (var i = 0; i < 3; i++) {
-//       // Create Proposal
-//       transaction = await dao.connect(investor1).createProposal(`Proposal ${i + 1}`, ether(100), recipient.address)
-//       await transaction.wait()
-
-//       // Vote 1
-//       transaction = await dao.connect(investor1).vote(i + 1)
-//       await transaction.wait()
-
-//       // Vote 2
-//       transaction = await dao.connect(investor2).vote(i + 1)
-//       await transaction.wait()
-
-//       // Vote 3
-//       transaction = await dao.connect(investor3).vote(i + 1)
-//       await transaction.wait()
-
-//       // Finalize
-//       transaction = await dao.connect(investor1).finalizeProposal(i + 1)
-//       await transaction.wait()
-
-//       console.log(`Created & Finalized Proposal ${i + 1}\n`)
-//   }
-
-//     console.log(`Creating one more proposal...\n`)
-
-//     // Create one more proposal
-//     transaction = await dao.connect(investor1).createProposal(`Proposal 4`, ether(100), recipient.address)
-//     await transaction.wait()
-
-//     // Vote 1
-//     transaction = await dao.connect(investor2).vote(4)
-//     await transaction.wait()
-
-//     // Vote 2
-//     transaction = await dao.connect(investor3).vote(4)
-//     await transaction.wait()
-
-//     console.log(`Finished.\n`)
 }
 
 

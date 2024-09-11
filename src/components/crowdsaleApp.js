@@ -38,7 +38,8 @@ function App1() {
     const { chainId } = await provider.getNetwork();
 
     // Instantiate contracts
-    const token = new ethers.Contract(config[chainId].token.address, TOKEN_ABI, provider);
+    // const token = new ethers.Contract(config[chainId].token.address, TOKEN_ABI, provider);
+    const token = ethers.getContractAt('Token', config[chainId].token.address)
     const crowdsale = new ethers.Contract(config[chainId].crowdsale.address, CROWDSALE_ABI, provider);
     setCrowdsale(crowdsale);
 
