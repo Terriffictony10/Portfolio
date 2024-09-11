@@ -159,7 +159,7 @@ describe('Decentratality', () => {
     let restaurantAddress, restaurantId;
     describe('Success', () => {
       beforeEach(async () => {
-        transaction = await decentratality.createRestaurant('Montecito')
+        transaction = await decentratality.createRestaurant('Montecito', ether(100), { value: ether(100) })
         result = await transaction.wait()
 
         const eventLogs = result.logs;
@@ -175,7 +175,13 @@ describe('Decentratality', () => {
         const restaurantContract = await decentratality.restaurants(restaurantId);
         expect(restaurantContract).to.equal(restaurantAddress);
       })
-      
+       it('ensures the restaurant has received the starting cash in Ether', async () => {
+        // Get the balance of the restaurant contract
+        const restaurantBalance = await ethers.provider.getBalance(restaurantAddress);
+
+        // Check that the balance equals 100 ether
+        expect(restaurantBalance).to.equal(ether(100));
+    });
 
     })
 

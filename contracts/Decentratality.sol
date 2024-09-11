@@ -15,6 +15,11 @@ contract Decentratality is ERC20, Ownable{
         address restaurant, 
         uint256 id
     );
+    event fundsAdded(
+        address restaurant, 
+        uint256 id,
+        uint256 timestamp
+    );
     
     // Constructor to initialize the token with a name, symbol, and total supply
     constructor(
@@ -28,9 +33,11 @@ contract Decentratality is ERC20, Ownable{
 
     
     function createRestaurant(
-        string memory _name
-    ) public returns(uint256){
+        string memory _name,
+        uint256 _startingCash
+    ) public payable returns(uint256){
        // Create the new Restaurant contract
+    require(msg.value >= _startingCash);
     Restaurant restaurant = new Restaurant(_name);
 
     // Increment the nextRestaurantId for the newly created restaurant
@@ -42,7 +49,18 @@ contract Decentratality is ERC20, Ownable{
     // Emit an event with the address and the ID of the new restaurant
     emit RestaurantCreated(address(restaurant), nextRestaurantId);
 
+    _addFunds(_startingCash, restaurant);
+
+    emit fundsAdded(address(restaurant), nextRestaurantId, block.timestamp);
+
     // Return the newly created restaurant contract
     return nextRestaurantId;
+    }
+    function _addFunds(
+        uint256 _amount, 
+        Restaurant _restaurant
+    ) internal {    
+         (bool sent, ) = address(_restaurant).call{value: _amount}("");
+         require(sent, "failed to send"); 
     }
 }
