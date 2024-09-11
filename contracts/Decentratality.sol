@@ -46,7 +46,7 @@ contract Decentratality is ERC20, Ownable{
     ) public payable onlyInvestor returns(uint256){
        // Create the new Restaurant contract
     require(msg.value >= _startingCash);
-    Restaurant restaurant = new Restaurant(_name);
+    Restaurant restaurant = new Restaurant(_name, msg.sender);
 
     // Increment the nextRestaurantId for the newly created restaurant
     nextRestaurantId++;

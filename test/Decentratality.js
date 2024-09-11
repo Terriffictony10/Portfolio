@@ -156,7 +156,7 @@ describe('Decentratality', () => {
 
   })
   describe('Restaurant Creation', () => {
-    let restaurantAddress, restaurantId;
+    let restaurantAddress, restaurantId, restaurantInstance, ownerBalanceBefore, ownerBalanceAfter;
     describe('Success', () => {
       beforeEach(async () => {
         transaction = await decentratality.createRestaurant('Montecito', ether(100), { value: ether(100) })
@@ -174,6 +174,8 @@ describe('Decentratality', () => {
 
             restaurantAddress = decodedEvent[0];
             restaurantId = decodedEvent[1]; // Get the restaurant address from the decoded event // Log the address
+
+            restaurantInstance = await ethers.getContractAt("Restaurant", restaurantAddress);
       })
       it('creates the restaurant and stores it in the restaurants mapping properly', async() => {
         const restaurantContract = await decentratality.restaurants(restaurantId);
@@ -186,6 +188,12 @@ describe('Decentratality', () => {
         // Check that the balance equals 100 ether
         expect(restaurantBalance).to.equal(ether(100));
     });
+       it('checks the owner of the restaurant', async () => {
+      // Verify that the deployer is the owner of the restaurant
+      const owner = await restaurantInstance.owner();
+      expect(owner).to.equal(deployer.address);
+    });
+
 
        it('emits the fundsAdded event with correct arguments', async () => {
             // Ensure the fundsAdded event is emitted with the correct arguments
@@ -194,7 +202,40 @@ describe('Decentratality', () => {
                 .withArgs(restaurantAddress, restaurantId, (await ethers.provider.getBlock(result.blockNumber)).timestamp);
         });
 
-    })
+        describe('payOwner Function', () => {
+      it('payOwner pays owner', async () => {
+        // Call payOwner to pay the deployer (owner) 50 Ether
+        transaction = await restaurantInstance.connect(deployer).payOwner(ether(50));
+        await expect(transaction.wait()).to.not.be.reverted;
+      });
+
+      it('ACTUALLY pays owner', async () => {
+    // Record owner's balance before calling payOwner
+    const ownerBalanceBefore = await ethers.provider.getBalance(deployer.address);
+  
+    // Call payOwner to pay the deployer (owner) 50 Ether
+    transaction = await restaurantInstance.connect(deployer).payOwner(ether(50));
+    const txReceipt = await transaction.wait(); // Wait for the transaction receipt
+
+    // Get contract balance after calling payOwner
+    const contractBalanceAfter = await ethers.provider.getBalance(restaurantAddress);
+    expect(contractBalanceAfter).to.equal(ether(50)); // Ensure contract has 50 ether left
+
+    // Get owner's balance after calling payOwner
+    const ownerBalanceAfter = await ethers.provider.getBalance(deployer.address);
+
+    // Calculate the gas cost
+    const gasUsed = BigInt(txReceipt.gasUsed);
+    const gasPrice = BigInt(transaction.gasPrice);
+    const gasCost = gasUsed * gasPrice;
+
+    // Check that the owner's balance increased by approximately 50 Ether (minus gas costs)
+    expect(ownerBalanceAfter).to.be.gt(ownerBalanceBefore + ether(49n) - gasCost); // Adjust for gas
+      });
+    });
+  });
+
+    
 
     describe('Failure', async () => {
       it('rejects restaurant creation by non-token holders', async () => {

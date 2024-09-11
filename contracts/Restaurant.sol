@@ -6,8 +6,9 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract Restaurant is Ownable{
 	string public name;
 	constructor(
-		string memory _name
-	) Ownable(msg.sender){
+		string memory _name, 
+		address _owner
+	) Ownable(_owner){
 		name = _name;
 	}
 	
