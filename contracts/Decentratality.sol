@@ -20,6 +20,14 @@ contract Decentratality is ERC20, Ownable{
         uint256 id,
         uint256 timestamp
     );
+
+    modifier onlyInvestor () {
+        require(
+            balanceOf(msg.sender) > 0,
+            'must be token holder'
+        );
+        _;
+    }
     
     // Constructor to initialize the token with a name, symbol, and total supply
     constructor(
@@ -35,7 +43,7 @@ contract Decentratality is ERC20, Ownable{
     function createRestaurant(
         string memory _name,
         uint256 _startingCash
-    ) public payable returns(uint256){
+    ) public payable onlyInvestor returns(uint256){
        // Create the new Restaurant contract
     require(msg.value >= _startingCash);
     Restaurant restaurant = new Restaurant(_name);

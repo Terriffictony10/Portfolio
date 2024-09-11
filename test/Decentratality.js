@@ -162,14 +162,18 @@ describe('Decentratality', () => {
         transaction = await decentratality.createRestaurant('Montecito', ether(100), { value: ether(100) })
         result = await transaction.wait()
 
-        const eventLogs = result.logs;
-        const event = decentratality.interface.decodeEventLog(
-            'RestaurantCreated', // The event name
-            eventLogs[0].data,    // Event data
-            eventLogs[0].topics   // Event topics (indexed parameters)
-         );
-        restaurantAddress = event.restaurant;
-        restaurantId = event.id; // Get the restaurant address from the decoded event // Log the address
+        
+        const event = result.logs.find(log => 
+                log.topics[0] === ethers.id("RestaurantCreated(address,uint256)")
+            );
+
+            const decodedEvent = ethers.AbiCoder.defaultAbiCoder().decode(
+                ['address', 'uint256'], 
+                event.data
+            );
+
+            restaurantAddress = decodedEvent[0];
+            restaurantId = decodedEvent[1]; // Get the restaurant address from the decoded event // Log the address
       })
       it('creates the restaurant and stores it in the restaurants mapping properly', async() => {
         const restaurantContract = await decentratality.restaurants(restaurantId);
@@ -183,10 +187,25 @@ describe('Decentratality', () => {
         expect(restaurantBalance).to.equal(ether(100));
     });
 
+       it('emits the fundsAdded event with correct arguments', async () => {
+            // Ensure the fundsAdded event is emitted with the correct arguments
+            await expect(transaction)
+                .to.emit(decentratality, 'fundsAdded')
+                .withArgs(restaurantAddress, restaurantId, (await ethers.provider.getBlock(result.blockNumber)).timestamp);
+        });
+
     })
 
     describe('Failure', async () => {
-     
+      it('rejects restaurant creation by non-token holders', async () => {
+            // Transfer all tokens from user1 to deployer to ensure user1 has no tokens
+            await decentratality.connect(user1).transfer(deployer.address, await decentratality.balanceOf(user1.address));
+
+            // Try to create a restaurant with user1 (who now has no tokens)
+            await expect(
+                decentratality.connect(user1).createRestaurant('Santa Barbara', ether(100), { value: ether(100) })
+            ).to.be.revertedWith('must be token holder');
+        });
     })
 
   })
