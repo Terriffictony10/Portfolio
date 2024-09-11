@@ -20,8 +20,8 @@ async function main() {
   	const recipient = accounts[4]
 
 
-	const Token = await hre.ethers.getContractFactory("Token")
-	const token = await Token.deploy('Decentratality', SYMBOL, MAX_SUPPLY)
+	
+	const token = await hre.ethers.deployContract('Token', ['Decentratality', SYMBOL, MAX_SUPPLY])
 	
 	
 
@@ -29,8 +29,8 @@ async function main() {
 	console.log(`Crowdsale Token deployed to: ${token.target}\n`)
 	
 
-	const Crowdsale = await hre.ethers.getContractFactory('Crowdsale')
-	const crowdsale = await Crowdsale.deploy(token.target, PRICE, ethers.parseUnits(MAX_SUPPLY, 'ether'))
+	
+	const crowdsale = await hre.ethers.deployContract('Crowdsale', [token.target, PRICE, ethers.parseUnits(MAX_SUPPLY, 'ether')])
 	
 
 	console.log(`Crowdsale deployed to: ${crowdsale.target}\n`)
@@ -40,8 +40,8 @@ async function main() {
 
 	console.log('Tokens transferred to Crowdsale')
 
-	const DAO = await hre.ethers.getContractFactory('DAO')
-  const dao = await DAO.deploy(token.target, '500000000000000000000001')
+	
+  const dao = await hre.ethers.deployContract('DAO', [token.target, '500000000000000000000001'])
 
   console.log(`DAO deployed to: ${dao.target}\n`)
 	
